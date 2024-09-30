@@ -12,7 +12,11 @@ app.use(cors());
 
 // Connect to MongoDB
 mongoose
+<<<<<<< HEAD
   .connect(process.env.MONGO_URI, {
+=======
+  .connect("mongodb+srv:/......", {
+>>>>>>> 1d482864c05366eb56799a5dcfa6239d98293dc4
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
