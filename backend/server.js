@@ -12,7 +12,7 @@ app.use(cors());
 
 // Connect to MongoDB
 mongoose
-  .connect("mongodb+srv://Navneet:Navneet12@cluster0.gjlty.mongodb.net/auth?retryWrites=true&w=majority&appName=Cluster0", {
+  .connect("mongodb+srv:/......", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
