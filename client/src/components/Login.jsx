@@ -9,9 +9,12 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const { login } = useAuth(); // Get login from AuthContext
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false); // Loading state
+  const [error, setError] = useState(""); // Error state
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true); // Set loading to true
 
     try {
       const res = await axios.post("http://localhost:5000/api/auth/login", {
@@ -27,12 +30,16 @@ const Login = () => {
       localStorage.setItem("token", res.data.token);
 
       // Navigate to home after successful login
+     
       navigate("/");
     } catch (error) {
       console.error(
         "Login failed",
         error.response ? error.response.data : error.message
       );
+      setError("Login failed. Please check your credentials."); // Set error message
+    } finally {
+      setLoading(false); // Set loading to false
     }
   };
 
@@ -42,9 +49,8 @@ const Login = () => {
         <h2 className="text-3xl font-bold mb-6 text-white text-center">
           Login
         </h2>
+        {error && <div className="text-red-500 text-center mb-4">{error}</div>} {/* Display error message */}
         <form onSubmit={handleLogin}>
-          {" "}
-          {/* Corrected form submit handler */}
           <div className="mb-4">
             <input
               type="email"
@@ -68,8 +74,9 @@ const Login = () => {
           <button
             type="submit"
             className="w-full bg-[#2952e3] text-white p-2 rounded hover:bg-[#2546bd] transition duration-200"
+            disabled={loading} // Disable button while loading
           >
-            Login
+            {loading ? "Loading..." : "Login"} {/* Show loading text */}
           </button>
         </form>
         <p className="text-white text-center mt-4">

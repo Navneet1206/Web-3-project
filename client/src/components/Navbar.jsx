@@ -44,9 +44,7 @@ const Navbar = () => {
             Logout
           </li>
         ) : (
-          <li className="bg-[#2952e3] py-2 px-7 mx-4 rounded-full cursor-pointer hover:bg-[#2546bd]">
-            <Link to="/login">Login</Link>
-          </li>
+          <li></li>
         )}
       </ul>
 

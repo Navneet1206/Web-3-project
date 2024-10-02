@@ -1,4 +1,4 @@
-import { Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import React, { useState } from "react";
 import axios from "axios";
 
@@ -24,6 +24,14 @@ const Signup = () => {
       });
 
       console.log("Signup successful", res.data);
+      alert("Signup successful! Go to Login"); // Notification when signup is complete
+
+      // Clear all inputs
+      setName("");
+      setEmail("");
+      setPassword("");
+      setConfirmPassword("");
+
       // Store token and user data in localStorage or state
     } catch (error) {
       console.error("Signup failed", error.response.data);
