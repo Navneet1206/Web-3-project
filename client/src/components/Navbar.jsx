@@ -3,24 +3,29 @@ import { HiMenuAlt4 } from "react-icons/hi";
 import { AiOutlineClose } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import logo from "../../images/logo.png";
-import { useAuth } from '../context/AuthContext'; // Import Auth Context
+import { useAuth } from "../context/AuthContext"; // Import Auth Context
 
+// NavBarItem component to render each navigation item
 const NavBarItem = ({ title, link }) => (
   <li className="mx-4 cursor-pointer">
-    <Link to={link} className="text-white">{title}</Link>
+    <Link to={link} className="text-white">
+      {title}
+    </Link>
   </li>
 );
 
 const Navbar = () => {
-  const { user, logout } = useAuth();
-  const [toggleMenu, setToggleMenu] = React.useState(false);
+  const { user, logout } = useAuth(); // Access user and logout function from useAuth
+  const [toggleMenu, setToggleMenu] = React.useState(false); // State to toggle mobile menu
 
   return (
     <nav className="w-full flex md:justify-center justify-between items-center p-4 bg-gray-800">
+      {/* Logo Section */}
       <div className="md:flex-[0.5] flex-initial justify-center items-center">
         <img src={logo} alt="logo" className="w-32 cursor-pointer" />
       </div>
 
+      {/* Desktop Menu */}
       <ul className="text-white md:flex hidden list-none flex-row justify-between items-center flex-initial">
         {[
           { title: "Home", link: "/" },
@@ -32,7 +37,10 @@ const Navbar = () => {
           <NavBarItem key={index} title={item.title} link={item.link} />
         ))}
         {user ? (
-          <li className="bg-[#2952e3] py-2 px-7 mx-4 rounded-full cursor-pointer hover:bg-[#2546bd]" onClick={logout}>
+          <li
+            className="bg-[#2952e3] py-2 px-7 mx-4 rounded-full cursor-pointer hover:bg-[#2546bd]"
+            onClick={logout}
+          >
             Logout
           </li>
         ) : (
@@ -42,6 +50,7 @@ const Navbar = () => {
         )}
       </ul>
 
+      {/* Mobile Menu */}
       <div className="flex relative">
         {!toggleMenu && (
           <HiMenuAlt4
@@ -74,7 +83,10 @@ const Navbar = () => {
               <NavBarItem key={index} title={item.title} link={item.link} />
             ))}
             {user ? (
-              <li className="bg-[#2952e3] py-2 px-7 mx-4 rounded-full cursor-pointer hover:bg-[#2546bd]" onClick={logout}>
+              <li
+                className="bg-[#2952e3] py-2 px-7 mx-4 rounded-full cursor-pointer hover:bg-[#2546bd]"
+                onClick={logout}
+              >
                 Logout
               </li>
             ) : (

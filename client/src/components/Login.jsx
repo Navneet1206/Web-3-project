@@ -1,20 +1,38 @@
+// src/components/Login.jsx
 import { Link, useNavigate } from "react-router-dom";
 import React, { useState } from "react";
-import { useAuth } from "../context/AuthContext";
+import axios from "axios";
+import { useAuth } from "../context/AuthContext"; // Import AuthContext
 
 const Login = () => {
-  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { login } = useAuth(); // Get login from AuthContext
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+
     try {
-      await login(email, password);
+      const res = await axios.post("http://localhost:5000/api/auth/login", {
+        email,
+        password,
+      });
+
+      console.log("Login successful", res.data);
+
+      // Save the user data from the response
+      login(res.data.user); // Call login from AuthContext
+      // Optionally, store the token in localStorage for persistent login
+      localStorage.setItem("token", res.data.token);
+
+      // Navigate to home after successful login
       navigate("/");
-    } catch (err) {
-      console.error("Login failed:", err);
+    } catch (error) {
+      console.error(
+        "Login failed",
+        error.response ? error.response.data : error.message
+      );
     }
   };
 
@@ -25,6 +43,8 @@ const Login = () => {
           Login
         </h2>
         <form onSubmit={handleLogin}>
+          {" "}
+          {/* Corrected form submit handler */}
           <div className="mb-4">
             <input
               type="email"

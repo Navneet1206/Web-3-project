@@ -1,30 +1,31 @@
 // src/context/AuthContext.jsx
 import React, { createContext, useContext, useState } from 'react';
 
+// Create the context
 const AuthContext = createContext();
 
+// Create the hook to use the AuthContext
+export const useAuth = () => useContext(AuthContext);
+
+// Provide the context with value
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  const signup = async (email, password) => {
-    // Simulate a signup process
-    setUser({ email });
+  // Function to handle login and store user data
+  const login = (userData) => {
+    setUser(userData);
   };
 
-  const login = async (email, password) => {
-    // Simulate a login process
-    setUser({ email });
-  };
-
+  // Function to handle logout
   const logout = () => {
     setUser(null);
+    // Optionally, remove token from localStorage
+    localStorage.removeItem("token");
   };
 
   return (
-    <AuthContext.Provider value={{ user, signup, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
 };
-
-export const useAuth = () => (useContext(AuthContext));
