@@ -10,7 +10,7 @@ const app = express();
 
 // Enable CORS
 app.use(cors({
-  origin: 'http://localhost:3000', // Ensure this does NOT end with a slash
+  origin: 'https://krypto-by-navneet.netlify.app/', // Ensure this does NOT end with a slash
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify methods if necessary
 }));
 
