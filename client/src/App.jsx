@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { Navbar, Footer } from "./components";
 import Welcome from "./components/Welcome";
 import Services from "./components/Services";
@@ -56,8 +51,7 @@ const App = () => (
             path="/services"
             element={
               <PrivateRoute>
-                {" "}
-                <Services />{" "}
+                <Services />
               </PrivateRoute>
             }
           />
@@ -65,8 +59,7 @@ const App = () => (
             path="/transactions"
             element={
               <PrivateRoute>
-                {" "}
-                <Transactions />{" "}
+                <Transactions />
               </PrivateRoute>
             }
           />

@@ -1,20 +1,21 @@
-// src/components/Login.jsx
 import { Link, useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import axios from "axios";
-import { useAuth } from "../context/AuthContext"; // Import AuthContext
+import { useAuth } from "../context/AuthContext";
+import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai"; // Import eye icons
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { login } = useAuth(); // Get login from AuthContext
+  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
+  const { login } = useAuth();
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false); // Loading state
-  const [error, setError] = useState(""); // Error state
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setLoading(true); // Set loading to true
+    setLoading(true);
 
     try {
       const res = await axios.post("http://localhost:5000/api/auth/login", {
@@ -22,24 +23,13 @@ const Login = () => {
         password,
       });
 
-      console.log("Login successful", res.data);
-
-      // Save the user data from the response
-      login(res.data.user); // Call login from AuthContext
-      // Optionally, store the token in localStorage for persistent login
+      login(res.data.user);
       localStorage.setItem("token", res.data.token);
-
-      // Navigate to home after successful login
-     
       navigate("/");
     } catch (error) {
-      console.error(
-        "Login failed",
-        error.response ? error.response.data : error.message
-      );
-      setError("Login failed. Please check your credentials."); // Set error message
+      setError("Login failed. Please check your credentials.");
     } finally {
-      setLoading(false); // Set loading to false
+      setLoading(false);
     }
   };
 
@@ -49,7 +39,7 @@ const Login = () => {
         <h2 className="text-3xl font-bold mb-6 text-white text-center">
           Login
         </h2>
-        {error && <div className="text-red-500 text-center mb-4">{error}</div>} {/* Display error message */}
+        {error && <div className="text-red-500 text-center mb-4">{error}</div>}
         <form onSubmit={handleLogin}>
           <div className="mb-4">
             <input
@@ -61,22 +51,28 @@ const Login = () => {
               required
             />
           </div>
-          <div className="mb-4">
+          <div className="mb-4 relative">
             <input
-              type="password"
+              type={showPassword ? "text" : "password"} // Toggle password type
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Password"
               className="w-full p-2 border border-gray-400 rounded bg-transparent text-white outline-none focus:ring-2 focus:ring-[#2952e3]"
               required
             />
+            <div
+              className="absolute inset-y-0 right-3 flex items-center cursor-pointer"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <AiFillEyeInvisible className="text-white" /> : <AiFillEye className="text-white" />}
+            </div>
           </div>
           <button
             type="submit"
             className="w-full bg-[#2952e3] text-white p-2 rounded hover:bg-[#2546bd] transition duration-200"
-            disabled={loading} // Disable button while loading
+            disabled={loading}
           >
-            {loading ? "Loading..." : "Login"} {/* Show loading text */}
+            {loading ? "Loading..." : "Login"}
           </button>
         </form>
         <p className="text-white text-center mt-4">

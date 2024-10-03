@@ -5,14 +5,25 @@ const User = require("../models/User");
 const router = express.Router();
 
 // Signup route
+const validatePassword = (password) => {
+  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+  return regex.test(password);
+};
+
 router.post("/signup", async (req, res) => {
   const { name, email, password } = req.body;
-  
+
+  if (!validatePassword(password)) {
+    return res
+      .status(400)
+      .json({ message: "Password does not meet strength requirements." });
+  }
+
   try {
     // Check if user exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ message: "User already exists" });
+      return res.status(400).json({ message: "Email already exists" });
     }
 
     // Hash password
@@ -23,9 +34,13 @@ router.post("/signup", async (req, res) => {
     await user.save();
 
     // Generate JWT
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
 
-    res.status(201).json({ token, user: { name: user.name, email: user.email } });
+    res
+      .status(201)
+      .json({ token, user: { name: user.name, email: user.email } });
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }
@@ -49,9 +64,13 @@ router.post("/login", async (req, res) => {
     }
 
     // Generate JWT
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
 
-    res.status(200).json({ token, user: { name: user.name, email: user.email } });
+    res
+      .status(200)
+      .json({ token, user: { name: user.name, email: user.email } });
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }
@@ -61,7 +80,8 @@ router.post("/login", async (req, res) => {
 router.get("/me", (req, res) => {
   const token = req.headers.authorization.split(" ")[1];
 
-  if (!token) return res.status(401).json({ message: "No token, authorization denied" });
+  if (!token)
+    return res.status(401).json({ message: "No token, authorization denied" });
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);

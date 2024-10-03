@@ -1,7 +1,7 @@
 import React from "react";
 import { HiMenuAlt4 } from "react-icons/hi";
 import { AiOutlineClose } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import logo from "../../images/logo.png";
 import { useAuth } from "../context/AuthContext"; // Import Auth Context
 import "./Nav.css";
@@ -9,9 +9,15 @@ import "./Nav.css";
 // NavBarItem component to render each navigation item
 const NavBarItem = ({ title, link }) => (
   <li className="mx-4 cursor-pointer just__list">
-    <Link to={link} className="text-white">
+    <NavLink
+      to={link}
+      className={({ isActive }) =>
+        isActive ? "text-blue-500 active-class" : "text-white"
+      }
+      end
+    >
       {title}
-    </Link>
+    </NavLink>
   </li>
 );
 
@@ -69,7 +75,7 @@ const Navbar = () => {
 
         {toggleMenu && (
           <ul className="wrapper__list z-10 fixed top-0 right-0 p-3 w-[70vw] h-screen shadow-2xl md:hidden list-none flex flex-col justify-start items-end rounded-md bg-gray-900 text-white animate-slide-in">
-            <li className="text-xl w-full my-2 ">
+            <li className="text-xl w-full my-2">
               <AiOutlineClose onClick={() => setToggleMenu(false)} />
             </li>
             {[
