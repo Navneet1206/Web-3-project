@@ -1,4 +1,5 @@
 require('@nomiclabs/hardhat-waffle');
+require('./tasks/accounts');
 
 module.exports = {
   solidity: '0.8.0',

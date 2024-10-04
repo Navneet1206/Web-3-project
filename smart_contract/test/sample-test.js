@@ -1,19 +1,22 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
-describe("Greeter", function () {
-  it("Should return the new greeting once it's changed", async function () {
-    const Greeter = await ethers.getContractFactory("Greeter");
-    const greeter = await Greeter.deploy("Hello, world!");
-    await greeter.deployed();
+describe("Transactions", function () {
+  it("Should add transactions and retrieve them", async function () {
+    const Transactions = await ethers.getContractFactory("Transactions");
+    const transactions = await Transactions.deploy();
+    await transactions.deployed();
 
-    expect(await greeter.greet()).to.equal("Hello, world!");
+    // Add a transaction
+    await transactions.addToBlockchain(
+      "0xReceiverAddress", // Replace with a valid address
+      ethers.utils.parseEther("1"), 
+      "Test Message", 
+      "Test Keyword"
+    );
 
-    const setGreetingTx = await greeter.setGreeting("Hola, mundo!");
-
-    // wait until the transaction is mined
-    await setGreetingTx.wait();
-
-    expect(await greeter.greet()).to.equal("Hola, mundo!");
+    // Retrieve all transactions
+    const allTransactions = await transactions.getAllTransactions();
+    expect(allTransactions.length).to.equal(1);
   });
 });
